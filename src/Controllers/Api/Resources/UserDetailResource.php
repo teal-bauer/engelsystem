@@ -22,6 +22,10 @@ class UserDetailResource extends UserResource
                 'code' => $lang->language_code,
                 'is_native' => $lang->is_native,
             ])->toArray(),
+            'oauth' => $this->model->oauth->map(fn($o) => [
+                'provider' => $o->provider,
+                'identifier' => $o->identifier,
+            ])->toArray(),
         ]);
     }
 }
