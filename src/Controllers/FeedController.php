@@ -52,6 +52,7 @@ class FeedController extends BaseController
 
     public function ical(): Response
     {
+        $user = $this->auth->userFromApi();
         $shifts = $this->getShifts();
 
         /* @var string $timezoneTransitionStart */
@@ -69,10 +70,11 @@ class FeedController extends BaseController
             $response = $response->withHeader('content-disposition', 'attachment; filename=shifts.ics');
         }
 
-        return $response->withView(
-            'api/ical',
-            ['shiftEntries' => $shifts, 'timezoneTransitionStart' => $timezoneTransitionStart]
-        );
+        return $response->withView('api/ical', [
+            'shiftEntries' => $shifts,
+            'timezoneTransitionStart' => $timezoneTransitionStart,
+            'icalAlarms' => $user->settings->ical_alarms,
+        ]);
     }
 
     public function shifts(): Response
